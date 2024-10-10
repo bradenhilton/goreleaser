@@ -258,7 +258,7 @@ apk add --allow-untrusted goreleaser*.apk
     go install github.com/goreleaser/goreleaser/v2@latest
     ```
 
-    Requires Go 1.22.
+    Requires Go 1.23.
 
 === "Pro"
 
@@ -284,7 +284,7 @@ Its purpose is to be used within scripts and CIs.
 
 !!! tip
 
-    The `VERSION` environment variable can be ommited to get the latest stable
+    The `VERSION` environment variable can be omitted to get the latest stable
     version, or you can set it to `nightly` to get the last nightly build.
 
 ## Manually

@@ -29,6 +29,9 @@ const (
 var listen string
 
 func TestMain(m *testing.M) {
+	if !testlib.InPath("docker") {
+		os.Exit(m.Run())
+	}
 	prepareEnv()
 
 	requireNoErr := func(err error) {
@@ -48,7 +51,7 @@ func TestMain(m *testing.M) {
 			"MINIO_ROOT_USER=" + minioUser,
 			"MINIO_ROOT_PASSWORD=" + minioPwd,
 		},
-		ExposedPorts: []string{"9000", "9001"},
+		ExposedPorts: []string{"9000/tcp", "9001/tcp"},
 		Cmd:          []string{"server", "/data", "--console-address", ":9001"},
 	}, func(hc *docker.HostConfig) {
 		hc.AutoRemove = true
@@ -71,6 +74,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestMinioUpload(t *testing.T) {
+	testlib.CheckPath(t, "docker")
 	name := "basic"
 	directory := t.TempDir()
 	srcpath := filepath.Join(directory, "source.tar.gz")
@@ -176,6 +180,7 @@ func TestMinioUpload(t *testing.T) {
 }
 
 func TestMinioUploadCustomBucketID(t *testing.T) {
+	testlib.CheckPath(t, "docker")
 	name := "fromenv"
 	directory := t.TempDir()
 	tgzpath := filepath.Join(directory, "bin.tar.gz")
@@ -212,6 +217,7 @@ func TestMinioUploadCustomBucketID(t *testing.T) {
 }
 
 func TestMinioUploadExtraFilesOnly(t *testing.T) {
+	testlib.CheckPath(t, "docker")
 	name := "only-extra-files"
 	directory := t.TempDir()
 	tgzpath := filepath.Join(directory, "bin.tar.gz")
@@ -257,6 +263,7 @@ func TestMinioUploadExtraFilesOnly(t *testing.T) {
 }
 
 func TestMinioUploadRootDirectory(t *testing.T) {
+	testlib.CheckPath(t, "docker")
 	name := "rootdir"
 	directory := t.TempDir()
 	tgzpath := filepath.Join(directory, "bin.tar.gz")
@@ -292,6 +299,7 @@ func TestMinioUploadRootDirectory(t *testing.T) {
 }
 
 func TestMinioUploadInvalidCustomBucketID(t *testing.T) {
+	testlib.CheckPath(t, "docker")
 	directory := t.TempDir()
 	tgzpath := filepath.Join(directory, "bin.tar.gz")
 	debpath := filepath.Join(directory, "bin.deb")
@@ -324,6 +332,7 @@ func TestMinioUploadInvalidCustomBucketID(t *testing.T) {
 }
 
 func TestMinioUploadSkip(t *testing.T) {
+	testlib.CheckPath(t, "docker")
 	name := "basic"
 	directory := t.TempDir()
 	debpath := filepath.Join(directory, "bin.deb")

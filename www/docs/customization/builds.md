@@ -194,6 +194,8 @@ builds:
 
     # If true, skip the build.
     # Useful for library projects.
+    #
+    # Templates: allowed (since v2.3).
     skip: false
 
     # By default, GoReleaser will create your binaries inside
@@ -205,6 +207,8 @@ builds:
     # created, you can set this property.
     # If you do, you are responsible for keeping different builds from
     # overriding each other.
+    #
+    # Templates: allowed (since v2.3).
     no_unique_dist_dir: true
 
     # By default, GoReleaser will check if the main filepath has a main

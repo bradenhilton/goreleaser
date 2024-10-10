@@ -393,7 +393,14 @@
 						"type": "string"
 					},
 					"skip": {
-						"type": "boolean"
+						"oneOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "boolean"
+							}
+						]
 					},
 					"gobinary": {
 						"type": "string"
@@ -402,7 +409,14 @@
 						"type": "string"
 					},
 					"no_unique_dist_dir": {
-						"type": "boolean"
+						"oneOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "boolean"
+							}
+						]
 					},
 					"no_main_check": {
 						"type": "boolean"
@@ -2526,6 +2540,12 @@
 						},
 						"type": "array"
 					},
+					"binary_signs": {
+						"items": {
+							"$ref": "#/$defs/Sign"
+						},
+						"type": "array"
+					},
 					"env_files": {
 						"$ref": "#/$defs/EnvFiles"
 					},
@@ -3409,6 +3429,9 @@
 			"Snapshot": {
 				"properties": {
 					"name_template": {
+						"type": "string"
+					},
+					"version_template": {
 						"type": "string"
 					}
 				},

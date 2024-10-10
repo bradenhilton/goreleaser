@@ -34,7 +34,11 @@ func (Pipe) String() string {
 func (Pipe) Run(ctx *context.Context) error {
 	g := semerrgroup.New(ctx.Parallelism)
 	for _, build := range ctx.Config.Builds {
-		if build.Skip {
+		skip, err := tmpl.New(ctx).Bool(build.Skip)
+		if err != nil {
+			return err
+		}
+		if skip {
 			log.WithField("id", build.ID).Info("skip is set")
 			continue
 		}
@@ -194,7 +198,11 @@ func buildOptionsForTarget(ctx *context.Context, build config.Build, target stri
 
 	name := bin + ext
 	dir := fmt.Sprintf("%s_%s", build.ID, target)
-	if build.NoUniqueDistDir {
+	noUnique, err := tmpl.New(ctx).Bool(build.NoUniqueDistDir)
+	if err != nil {
+		return nil, err
+	}
+	if noUnique {
 		dir = ""
 	}
 	relpath := filepath.Join(ctx.Config.Dist, dir, name)
@@ -220,6 +228,9 @@ func extFor(target string, build config.BuildDetails) string {
 		if strings.Contains(target, "windows") {
 			return ".dll"
 		}
+		if strings.Contains(target, "wasm") {
+			return ".wasm"
+		}
 		return ".so"
 	case "c-archive":
 		if strings.Contains(target, "windows") {
@@ -228,7 +239,7 @@ func extFor(target string, build config.BuildDetails) string {
 		return ".a"
 	}
 
-	if target == "js_wasm" {
+	if strings.Contains(target, "wasm") {
 		return ".wasm"
 	}
 
